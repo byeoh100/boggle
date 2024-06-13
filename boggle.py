@@ -78,7 +78,7 @@ class BoggleBoard:
 			
 			return -1
 	
-	def check_sides(self, next_letter, row_i, col_i, used_i):
+	def check_sides(self, next_letter, row_i, col_i, used_i): # returning list instead of tuples also loops back around
 		for row in range(-1, 2):
 			for col in range(-1, 2):
 				new_row_i = row_i + row
@@ -102,3 +102,8 @@ board1.shake()
 print_board()
 word = input("Enter word: ")
 print(board1.first_letter_finder(word.upper()))
+
+# items to add
+# used word list
+# valid word list
+# timer
