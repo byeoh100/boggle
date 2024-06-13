@@ -21,15 +21,15 @@ class BoggleBoard:
 		new_board = []
 
 		for i in range(4):
-			new_row_list = [self.dice_picker_roller() for x in range(4)]
-			new_row = ""
-			for i in new_row_list: # Maybe put this in it's own formatting method
+			new_row_i_list = [self.dice_picker_roller() for x in range(4)]
+			new_row_i = ""
+			for i in new_row_i_list: # Maybe put this in it's own formatting method
 				if i == "Q":
-					new_row += f"Qu "
+					new_row_i += f"Qu "
 				else:
-					new_row += f"{i}  "
-			self._board_list.append(new_row_list)
-			new_board.append(new_row.strip())
+					new_row_i += f"{i}  "
+			self._board_list.append(new_row_i_list)
+			new_board.append(new_row_i.strip())
 
 		self._board = new_board
 
@@ -41,12 +41,35 @@ class BoggleBoard:
 		self._dice.pop(dice_num)
 		return picked_letter
 	
-	def word_checker(self, word):
-		for i in word:
-			if not any(i in x for x in self._board_list):
-				return False
-		word_start_list =drffd [[j for i in range(len(i)) for j in range(len(self._board_list))]]
-		return word_start_list
+	def first_letter_finder(self, word):
+		first_letters = []
+		
+		for row_i, row in enumerate(self._board_list):
+			if word[0] in row:
+				col_i = row.index(word[0])
+				first_letters.append({row_i, col_i})
+				if not self.check_sides(word, row_i, col_i):
+					continue
+
+		print(first_letters)
+
+	def word_checker(self):
+		pass
+	
+	def check_sides(self, word, row_i, col_i):
+		next_letter_i = []
+		for row in range(-1, 2):
+			for col in range(-1, 2):
+				new_row_i = row_i + row
+				new_col_i = col_i + col
+				x_bound = len(self._board_list) - 1
+				y_bound = len(self._board_list[row_i]) - 1
+				
+				if new_row_i > x_bound or new_row_i < 0 or new_col_i > y_bound or new_col_i < 0 or row == 0 and col == 0:
+					continue
+				if self._board_list[new_row_i][new_col_i] == word[1]:
+					next_letter_i.append({new_row_i:new_col_i})
+		return next_letter_i
 
 def print_board():
 	for i in board1.board:
@@ -55,5 +78,6 @@ def print_board():
 board1 = BoggleBoard()
 board1.shake()
 print_board()
-#word = input("Enter word: ")
-print(board1.word_checker("A"))
+word = input("Enter word: ")
+board1.first_letter_finder(word.upper())
+pass
