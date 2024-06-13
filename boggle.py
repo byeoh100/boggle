@@ -45,9 +45,9 @@ class BoggleBoard:
 		first_letters = []
 		
 		for row_i, row in enumerate(self._board_list):
-			if word[0] in row:
-				col_i = row.index(word[0])
-				first_letters.append([row_i, col_i])
+			for col_i, col in enumerate(row):
+				if col == word[0]:
+					first_letters.append((row_i, col_i))
 
 		result = self.word_checker(word, first_letters)
 		return result
@@ -56,19 +56,17 @@ class BoggleBoard:
 		next_letter_i = 0
 
 		for i in first_letters:
-			row_i = [i[0]]
-			col_i = [i[1]]
+			row_i, col_i = i
 			path = []
-			path.append([row_i, col_i])
+			path.append((row_i, col_i))
 			next_letter_i += 1
 			used_i = []
 
 			while len(path) > 0:
 				if next_letter_i == len(word):
 					return path
-				last_ele = path[-1] # error here
-				path_head_row = last_ele[0]
-				path_head_col = last_ele[1]
+				path_head_row = path[-1][0]
+				path_head_col = path[-1][1]
 				search = self.check_sides(word[next_letter_i], path_head_row, path_head_col, used_i)
 				if search == -1:
 					used_i.append([path_head_row, path_head_col])
@@ -104,4 +102,3 @@ board1.shake()
 print_board()
 word = input("Enter word: ")
 print(board1.first_letter_finder(word.upper()))
-pass
