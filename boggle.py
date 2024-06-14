@@ -96,7 +96,7 @@ class BoggleBoard:
 					next_letter_i += 1
 				
 				debug += 1
-				if debug == 15:
+				if debug == 10000:
 					print(path, word[next_letter_i], used_i)
 					break
 			
