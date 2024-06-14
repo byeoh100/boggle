@@ -29,8 +29,9 @@ class BoggleBoard:
 		self._path_dict = {}
 
 	@property
-	def board(self):
-		return self._board
+	def print(self):
+		for i in self._board:
+			print(i)
 
 	def shake(self):
 		new_board = []
@@ -65,6 +66,9 @@ class BoggleBoard:
 					first_letters.append((row_i, col_i))
 
 		result = self.word_checker(word, first_letters)
+		
+		if result == -1:
+			return "Word not found!"
 		self.highlight_word(result)
 		return "Word found!"
 
@@ -149,15 +153,11 @@ class BoggleBoard:
 			
 			time.sleep(0.5)
 
-def print_board():
-	for i in board1.board:
-		print(i)
-
-board1 = BoggleBoard()
-board1.shake()
-print_board()
-word = input("Enter word: ")
-print(board1.first_letter_finder(word.upper()))
+# board1 = BoggleBoard()
+# board1.shake()
+# board1.print
+# word = input("Enter word: ")
+# print(board1.first_letter_finder(word.upper()))
 
 # items to add
 # used word list
