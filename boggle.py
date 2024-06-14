@@ -25,7 +25,7 @@ class BoggleBoard:
 			"_  _  _  _"
 		]
 		self._board_list = []
-		self._dice = [x for x in BoggleBoard.master_dice]
+		self._dice = []
 		self._path_dict = {}
 
 	@property
@@ -34,6 +34,8 @@ class BoggleBoard:
 			print(i)
 
 	def shake(self):
+		self._board_list = []
+		self._dice = [x for x in BoggleBoard.master_dice]
 		new_board = []
 
 		for i in range(4):
@@ -66,13 +68,14 @@ class BoggleBoard:
 					first_letters.append((row_i, col_i))
 
 		result = self.word_checker(word, first_letters)
-		
+		self._path_dict.clear()
+
 		if result == -1:
 			return "Word not found!"
 		self.highlight_word(result)
 		return "Word found!"
 
-	def word_checker(self, word, first_letters): # still looping back
+	def word_checker(self, word, first_letters): # Still looping back in rare edge cases
 		for start_i in first_letters:
 			path = [start_i]
 			next_letter_i = 1
@@ -82,7 +85,7 @@ class BoggleBoard:
 				if next_letter_i == len(word):
 					return path
 				
-				self.set_path_dict(path[-1], path[-1])
+				self.set_path_dict(path[-1], path[-1], start_i)
 				used_i = self.get_path_dict(path[-1])
 				path_head_row, path_head_col = path[-1]
 				search = self.check_sides(word[next_letter_i], path_head_row, path_head_col, used_i)
@@ -91,7 +94,7 @@ class BoggleBoard:
 					path.pop()
 					next_letter_i -= 1
 				else:
-					self.set_path_dict(path[-1], search)
+					self.set_path_dict(path[-1], search, start_i)
 					path.append(search)
 					next_letter_i += 1
 				
@@ -99,8 +102,8 @@ class BoggleBoard:
 				if debug == 10000:
 					print(path, word[next_letter_i], used_i)
 					break
-			
-			used_i.clear()
+
+			self._path_dict.clear()
 			
 		return -1
 	
@@ -125,13 +128,14 @@ class BoggleBoard:
 	def get_path_dict(self, coords):
 		return self._path_dict[coords]
 	
-	def set_path_dict(self, curr_pos, dead_end):
+	def set_path_dict(self, curr_pos, dead_end, start_pos):
 		if curr_pos in self._path_dict and self._path_dict[curr_pos] == dead_end:
 			return 0
 		elif curr_pos in self._path_dict:
 			self._path_dict[curr_pos].append(dead_end)
 		else:
 			self._path_dict[curr_pos] = [dead_end]
+			self._path_dict[curr_pos].append(start_pos)
 	
 	def highlight_word(self, letter_list_i):
 		print_list = []
@@ -151,15 +155,8 @@ class BoggleBoard:
 					else:
 						print("  ", end="")
 			
-			time.sleep(0.5)
-
-# board1 = BoggleBoard()
-# board1.shake()
-# board1.print
-# word = input("Enter word: ")
-# print(board1.first_letter_finder(word.upper()))
+			time.sleep(0.25)
 
 # items to add
-# used word list
-# valid word list
 # timer
+# Q -> Qu functionality
