@@ -43,6 +43,7 @@ start()
 while selection != "0":
     if selection == 2:
         start()
+        found_words = []
     selection = game_loop()
 
 os.system("cls||clear")
